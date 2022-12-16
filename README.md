@@ -1,1 +1,2 @@
 # tictactoe-js
+This app is [The Odin Project's Tic-Tac-Toe assignment] (https://www.theodinproject.com/lessons/javascript-tic-tac-toe). It is a toy app project intended to practice, implement and explore the concepts of Factory Functions and the Module Pattern.
