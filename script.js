@@ -1,23 +1,26 @@
 // This module controls the flow of a game
 const GamePlay = (() => {
-    const _gameOver = false;
-    const _counter = 0;
+    let _gameOver = false;
     let _currentPlayer = null;
+    let playerOne = null;
+    let playerTwo = null;
+    const resetGame = () => {
+        _gameOver = false;
+        _currentPlayer = null;
+        playerOne = null;
+        playerTwo = null;
+    }
+    const setPlayers = (pOne, pTwo) => {
+        _currentPlayer = pOne;
+        pOne.turn = true;
+        playerOne = pOne;
+        playerTwo = pTwo;
+    };
     const _setMark = (buttonID) => {
-        // if(GameBoard.gameBoard[buttonID] === "") {
-            GameBoard.gameBoard[buttonID] = _currentPlayer.mark;
-        // }
-    }
-    const _clearBoard = (board) => {
-        while(board.firstChild) {
-            board.removeChild(board.lastChild);
-        }
-    }
+        GameBoard.gameBoard[buttonID] = _currentPlayer.mark;
+    };
     const _switchTurn = () => {
-        if (playerOne.turn === false && playerTwo.turn === false) {
-            playerOne.turn = true;
-            _currentPlayer = playerOne;
-        } else if (playerOne.turn === true) {
+        if (playerOne.turn === true) {
             playerOne.turn = false;
             playerTwo.turn = true;
             _currentPlayer = playerTwo;
@@ -27,30 +30,57 @@ const GamePlay = (() => {
             _currentPlayer = playerOne;
         }
     };
-    const _checkGameOver = () => {
-        if(_counter > GameBoard.gameBoard.length) {
+    const _checkGameOver = (board, mark) => {
+        if(board[0] === mark && board[1] === mark && board[2] === mark) {
+            _gameOver = true;
+        } else if(board[3] === mark && board[4] === mark && board[5] === mark){
+            _gameOver = true;
+        } else if(board[6] === mark && board[7] === mark && board[8] === mark){
+            _gameOver = true;
+        } else if(board[0] === mark && board[3] === mark && board[6] === mark){
+            _gameOver = true;
+        } else if(board[1] === mark && board[4] === mark && board[7] === mark){
+            _gameOver = true;
+        } else if(board[2] === mark && board[5] === mark && board[8] === mark){
+            _gameOver = true;
+        } else if(board[0] === mark && board[4] && board[8] === mark){
+            _gameOver = true;
+        } else if(board[2] === mark && board[4] === mark && board[6] === mark){
             _gameOver = true;
         }
-    }
+    };
+    const _displayWinner = () => {
+        if(_gameOver === true) {
+            const main = document.querySelector('main');
+            main.replaceChildren();
+            let winnerText = document.createElement('p');
+            winnerText.innerHTML = `Player ${_currentPlayer.mark} wins!`;
+            main.appendChild(winnerText);
+        }
+    };
     /* Continue allowing players to select squares on the board until a win or tie condition is met */
     const gameLoop = (buttonID) => {
-            // clear the board
+            // Freeze board and offer new game button if game is over
+            // Clear the board
             const main = document.querySelector('main');
-            _clearBoard(main);
+            displayController.clearBoard(main);
             if(GameBoard.gameBoard[buttonID] === "") {
-                // switch turns
+                // Switch turns
                 _switchTurn();
                 // Update Array
                 _setMark(buttonID);
             }
-            // display board
+            // Display board
             displayController.displayBoard();
+                        // Check for win
+                        _checkGameOver(GameBoard.gameBoard, _currentPlayer.mark);
+                        _displayWinner();
     };
-    return { gameLoop }
+    return { gameLoop, setPlayers, resetGame }
 })();
 // This module is for storing the gameboard 
 const GameBoard = (() => {
-    const gameBoard = ["", "", "",
+    let gameBoard = ["", "", "",
                         "", "", "",
                         "", "", ""];
     return { gameBoard };
@@ -72,9 +102,28 @@ const displayController = (() => {
             button.onclick = () => { GamePlay.gameLoop(i) };
     }
 };
-    return { displayBoard };
+    const clearBoard = () => {
+        while(main.firstChild) {
+            main.removeChild(main.lastChild);
+        }
+    };
+    return { displayBoard, clearBoard };
 })();
 
-playerOne = Player('X');
-playerTwo = Player('O');
-displayController.displayBoard();
+const startGame = () => {
+        let playerOne = Player('O');
+        let playerTwo = Player('X');
+        const commenceGame = () => {
+            GamePlay.resetGame();
+            GameBoard.gameBoard = ["", "", "",
+                                    "", "", "",
+                                    "", "", ""];
+            displayController.clearBoard();
+            displayController.displayBoard();
+            GamePlay.setPlayers(playerOne, playerTwo);
+        }
+        return { commenceGame };
+};
+
+let newGame = startGame();
+newGame.commenceGame();

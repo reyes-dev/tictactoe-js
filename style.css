@@ -26,10 +26,16 @@ body {
     width: 100vw;
     background-color: var(--main-bg-color);
 }
-h1 {
+h1, p {
     color: var(--color-4);
+}
+h1 {
     height: 20vh;
     font-size: 4em;
+}
+p {
+    font-size: 1em;
+    grid-column-start: 2;
 }
 main {
     display: grid;
