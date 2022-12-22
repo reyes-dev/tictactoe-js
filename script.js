@@ -4,18 +4,21 @@ const GamePlay = (() => {
     let _currentPlayer = null;
     let playerOne = null;
     let playerTwo = null;
+    /* This function exists so that GamePlay variables can be returned to their original values over at startGame */
     const resetGame = () => {
         _gameOver = false;
         _currentPlayer = null;
         playerOne = null;
         playerTwo = null;
     }
+    /* This function exists so that startGame can give its initialized Players over to GamePlay */
     const setPlayers = (pOne, pTwo) => {
         _currentPlayer = pOne;
         pOne.turn = true;
         playerOne = pOne;
         playerTwo = pTwo;
     };
+    // Replacing an array index value with X or O
     const _setMark = (buttonID) => {
         GameBoard.gameBoard[buttonID] = _currentPlayer.mark;
     };
@@ -30,6 +33,7 @@ const GamePlay = (() => {
             _currentPlayer = playerOne;
         }
     };
+    // Check each possible TTT winning condition
     const _checkGameOver = (board, mark) => {
         if(board[0] === mark && board[1] === mark && board[2] === mark) {
             _gameOver = true;
@@ -49,6 +53,7 @@ const GamePlay = (() => {
             _gameOver = true;
         }
     };
+    // Insert congratulation text into the DOM along with a new game button
     const _displayWinner = () => {
         if(_gameOver === true) {
             const main = document.querySelector('main');
@@ -79,9 +84,10 @@ const GamePlay = (() => {
             }
             // Display board
             displayController.displayBoard();
-                        // Check for win
-                        _checkGameOver(GameBoard.gameBoard, _currentPlayer.mark);
-                        _displayWinner();
+            // Check for win
+            _checkGameOver(GameBoard.gameBoard, _currentPlayer.mark);
+            // Show the winner and offer a new game
+            _displayWinner();
     };
     return { gameLoop, setPlayers, resetGame }
 })();
