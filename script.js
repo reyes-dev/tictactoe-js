@@ -56,6 +56,13 @@ const GamePlay = (() => {
             let winnerText = document.createElement('p');
             winnerText.innerHTML = `Player ${_currentPlayer.mark} wins!`;
             main.appendChild(winnerText);
+            let restartButton = document.createElement('button');
+            restartButton.innerHTML = 'New Game?'
+            restartButton.setAttribute('class', 'restartButton');
+            restartButton.onclick = () => {
+                newGame.commenceGame();
+            }
+            main.appendChild(restartButton);
         }
     };
     /* Continue allowing players to select squares on the board until a win or tie condition is met */

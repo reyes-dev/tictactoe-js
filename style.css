@@ -36,6 +36,7 @@ h1 {
 p {
     font-size: 1em;
     grid-column-start: 2;
+    grid-row-start: 2;
 }
 main {
     display: grid;
@@ -55,4 +56,12 @@ button:hover {
 }
 button:active {
     transform: scale(0.9);
+}
+.restartButton {
+    grid-column-start: 2;
+    justify-self: center;
+    font-size: 2em;
+    height: fit-content;
+    width: 200%;
+    padding: .3em;
 }
